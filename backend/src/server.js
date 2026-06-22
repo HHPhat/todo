@@ -1,8 +1,10 @@
 import express from "express";
 import taskRoute from './routes/tasksRouters.js';
+// dns.setServers(['8.8.8.8', '8.8.4.4']);
+import { connectDB } from "./config/db.js";
 
 const app = express();
-
+connectDB();
 app.use("/api/tasks",taskRoute)
 
 app.listen(5001,() => {
