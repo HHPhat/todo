@@ -2,7 +2,7 @@
 import mysql from 'mysql2/promise';
 
 // Tạo Connection Pool kết nối đến database 'book'
-export const pool = mysql.createPool({
+ const pool = mysql.createPool({
     host: 'localhost',       
     user: 'root',            
     password: '',            
@@ -23,9 +23,6 @@ export const connectDB = async()=> {
     }
 };
 
-// Chạy hàm kiểm tra
-//testConnection();
-// Xuất pool để dùng ở các file khác (ví dụ: controllers, models)
-//module.exports = pool;
-//mongodb+srv://phatb2203463:Nu2QCgChHDzka7Z8@todo-shard-00-00.4vmiryz.mongodb.net/dev?retryWrites=true&w=majority&appname=ToDo
-//mongodb://phatb2203463_db_user:Nu2QCgChHDzka7Z8@todo-shard-00-00.4vmiryz.mongodb.net:27017,todo-shard-00-01.4vmiryz.mongodb.net:27017,todo-shard-00-02.4vmiryz.mongodb.net:27017/todo?tls=true&replicaSet=atlas-4vmiryz-shard-0&authSource=admin&retryWrites=true&w=majority
+
+export default pool;
+

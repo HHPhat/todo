@@ -1,3 +1,14 @@
+import SachModel from '../models/SachModel.js';
+
+export const listAllBooks = async (req, res) => {
+    try {
+        const books = await BookModel.getAll();
+        res.status(200).json(books);
+    } catch (error) {
+        res.status(500).json({ message: "Lỗi Server", error: error.message });
+    }
+};
+
 export const GetAllTasks = (request, response) => {
     response.status(200).send("bạn có một việc cần làm");
 }
