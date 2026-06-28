@@ -1,12 +1,14 @@
 import express from "express";
 import taskRoute from './routes/tasksRouters.js';
+import NguoiDung from './routes/NguoiDungRouters.js';
 // dns.setServers(['8.8.8.8', '8.8.4.4']);
 import { connectDB } from "./config/db.js";
 
 const app = express();
 connectDB();
+app.use(express.json());
 app.use("/api/tasks",taskRoute)
-
+app.use("/api/user",NguoiDung)
 app.listen(5001,() => {
     console.log("Server dang bat dau tren cong 5001");    
 });

@@ -18,9 +18,16 @@ export const CreateTasks = (req,res) => {
 }
 
 export const UpdateTasks = (req,res) => {
-    response.status(202).json({ message: "Task đã được update thành công."});
+    response.status(200).json({ message: "Task đã được update thành công."});
 }
 
 export const DeleteTasks = (req,res) => {
-    response.status(203).json({ message: "Task đã được xóa thành công."});
+    response.status(200).json({ message: "Task đã được xóa thành công."});
 }
+
+// 200 — thành công (GET, PUT, DELETE...)
+// 201 — tạo thành công (POST)
+// 400 — lỗi do client gửi thiếu/sai dữ liệu
+// 404 — không tìm thấy
+// 409 — xung đột (vd: email đã tồn tại)
+// 500 — lỗi phía server
