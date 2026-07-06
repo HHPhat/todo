@@ -16,6 +16,11 @@ class BaseModel {
         return rows;
     }
 
+    async find20() {
+        const [rows] = await pool.query(`SELECT * FROM ${this.table} LIMIT 20`);
+        return rows;
+    }
+
     // Lấy 1 bản ghi theo khóa chính
     async findById(id) {
         const [rows] = await pool.query(

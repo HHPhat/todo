@@ -42,6 +42,14 @@ class SachModel extends BaseModel {
         return rows;
     }
 
+    async findByDanhMuc20(danhMucId) {
+        const [rows] = await pool.query(
+            'SELECT * FROM SACH WHERE danh_muc_id = ? limit 20',
+            [danhMucId]
+        );
+        return rows;
+    }
+
     // Lấy sách theo nhà xuất bản
     async findByNxb(nxbId) {
         const [rows] = await pool.query(
