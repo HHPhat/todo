@@ -10,11 +10,14 @@ import {
     deleteSach,
     updateSach,
     createSach,
-    getSachByDanhMuc20
+    getSachByDanhMuc20,
+    getBookStats,
+    getBookQuantity
 } from '../controllers/Sach_Controller.js';
 
 const router = express.Router();
-
+router.get("/getbookquantity", getBookQuantity);
+router.get("/getbookstats", getBookStats);
 router.get("/", getAllSach);
 router.get("/get-20", get20Sach);
 router.get("/?query", searchSach);

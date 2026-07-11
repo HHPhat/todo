@@ -11,6 +11,24 @@ export const getAllSach = async (req, res) => {
     }
 };
 
+export const getBookStats = async (req, res) => {
+    try {
+        const list = await Sach.getbookstat();
+        res.status(200).json(list);
+    } catch (error) {
+        res.status(500).json({ message: 'Lỗi server', error: error.message });
+    }
+};
+
+export const getBookQuantity = async (req, res) => {
+    try {
+        const list = await Sach.getbookquantity();
+        res.status(200).json(list);
+    } catch (error) {
+        res.status(500).json({ message: 'Lỗi server', error: error.message });
+    }
+};
+
 export const get20Sach = async (req, res) => {
     try {
         const list = await Sach.find20();

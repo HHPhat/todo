@@ -5,7 +5,8 @@ import {
     createNguoiDung,
     updateNguoiDung,
     deleteNguoiDung,
-    updateTrangThaiNguoiDung
+    updateTrangThaiNguoiDung,
+    register, login
 } from '../controllers/NguoiDung_Controller.js';
 
 const router = express.Router();
@@ -16,5 +17,7 @@ router.post('/', createNguoiDung);
 router.put('/:id', updateNguoiDung);
 router.delete('/:id', deleteNguoiDung);
 router.patch('/:id/trang-thai', updateTrangThaiNguoiDung);
+router.post('/register', register);
+router.post('/login', login);
 
 export default router;

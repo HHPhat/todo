@@ -16,6 +16,14 @@ class SachTrongGioHangModel {
         return rows;
     }
 
+    async isGioHang(sachId, nguoiDungId) {
+        const [rows] = await pool.query(
+            'SELECT * FROM SACH_TRONG_GIO_HANG WHERE sach_id = ? AND nguoi_dung_id = ?',
+            [sachId, nguoiDungId]
+        );
+        return rows.length > 0;
+    }
+
     // Kiểm tra 1 sách đã có trong giỏ hàng chưa
     async findItem(nguoiDungId, sachId) {
         const [rows] = await pool.query(

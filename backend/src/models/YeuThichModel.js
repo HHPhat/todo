@@ -13,6 +13,14 @@ class YeuThichModel {
         return rows.length > 0;
     }
 
+    async LikeNumber(sachId) {
+        const [rows] = await pool.query(
+            'SELECT COUNT(*) as total_likes FROM YEU_THICH WHERE sach_id = ?',
+            [sachId]
+        );
+        return rows[0].total_likes;
+    }
+
     // Thêm vào yêu thích
     async add(sachId, nguoiDungId) {
         await pool.query(

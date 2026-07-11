@@ -1,4 +1,99 @@
 import NguoiDungModel from '../models/NguoiDungModel.js';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+
+// [POST] /api/users/register
+export const register = async (req, res) => {
+    try {
+        const { email, ho_ten, password, confirmPassword } = req.body;
+
+        // 1. Kiểm tra đầu vào cơ bản
+        if (!email || !ho_ten || !password) {
+            return res.status(400).json({ success: false, message: "Vui lòng điền đủ thông tin!" });
+        }
+        if (password !== confirmPassword) {
+            return res.status(400).json({ success: false, message: "Mật khẩu nhập lại không khớp!" });
+        }
+
+        // 2. Kiểm tra email đã tồn tại chưa (Dùng hàm bạn đã viết)
+        const existingUser = await NguoiDungModel.findByEmail(email);
+        if (existingUser) {
+            return res.status(400).json({ success: false, message: "Email này đã được đăng ký!" });
+        }
+
+        // 3. Hash mật khẩu bằng bcrypt
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
+
+        // 4. Lưu vào Database (Dùng hàm create bạn đã viết)
+        const newUser = {
+            email: email,
+            ho_va_ten: ho_ten,
+            password: hashedPassword 
+        };
+        await NguoiDungModel.create(newUser);
+
+        // --- ĐOẠN THÊM MỚI ---
+        // Lấy lại thông tin user vừa tạo để lấy được ID của họ
+        const createdUser = await NguoiDungModel.findByEmail(email);
+        
+        // Tạo luôn token đăng nhập cho user vừa đăng ký
+        const token = jwt.sign({ id: createdUser.id || createdUser._id, email: createdUser.email }, 'secret_key', { expiresIn: '1d' });
+
+        return res.status(201).json({ 
+            success: true, 
+            message: "Đăng ký thành công!",
+            token: token,
+            user: {
+                email: createdUser.email,
+                ho_va_ten: createdUser.ho_va_ten
+            }
+        });
+    } catch (error) {
+        console.error("Lỗi đăng ký:", error);
+        return res.status(500).json({ success: false, message: "Lỗi server!" });
+    }
+};
+
+// [POST] /api/users/login
+export const login = async (req, res) => {
+    try {
+        const { email, password } = req.body;
+
+        if (!email || !password) {
+            return res.status(400).json({ success: false, message: "Vui lòng nhập Email và Mật khẩu!" });
+        }
+
+        // 1. Tìm user theo email
+        const user = await NguoiDungModel.findByEmail(email);
+        if (!user) {
+            return res.status(404).json({ success: false, message: "Tài khoản không tồn tại!" });
+        }
+
+        // 2. So sánh mật khẩu nhập vào với mật khẩu đã hash trong CSDL
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+            return res.status(400).json({ success: false, message: "Sai mật khẩu!" });
+        }
+
+        // 3. Tạo Token (để Frontend lưu lại duy trì phiên đăng nhập)
+        // 'secret_key' nên được lưu trong file .env
+        const token = jwt.sign({ id: user.id || user._id, email: user.email }, 'secret_key', { expiresIn: '1d' });
+
+        return res.status(200).json({ 
+            success: true, 
+            message: "Đăng nhập thành công!",
+            token: token,
+            user: {
+                email: user.email,
+                ho_va_ten: user.ho_ten
+            }
+        });
+    } catch (error) {
+        console.error("Lỗi đăng nhập:", error);
+        return res.status(500).json({ success: false, message: "Lỗi server!" });
+    }
+};
 
 export const getNguoiDungById = async (req, res) => {
     try {

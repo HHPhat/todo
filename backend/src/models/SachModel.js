@@ -33,6 +33,20 @@ class SachModel extends BaseModel {
         return rows;
     }
 
+    async getbookstat() {
+        const [rows] = await pool.query(
+            `select * from book_stats`
+        );
+        return rows;
+    }
+
+    async getbookquantity() {
+        const [rows] = await pool.query(
+            `select * from view_quan_ly_kho_sach`
+        );
+        return rows;
+    }
+
     // Lấy sách theo danh mục
     async findByDanhMuc(danhMucId) {
         const [rows] = await pool.query(
