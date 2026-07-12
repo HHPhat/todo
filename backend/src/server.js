@@ -6,6 +6,7 @@ import DanhMuc from './routes/DanhMucRouters.js';
 import { connectDB } from "./config/db.js";
 import cors from 'cors';
 import yeuThichRouter from './routes/YeuThichRouters.js';
+import gioHangRouter from './routes/GioHang_Routers.js';
 
 const app = express();
 connectDB();
@@ -16,6 +17,7 @@ app.use("/api/book",Sach);
 app.use("/api/Category",DanhMuc);
 app.use('/api/favorites', yeuThichRouter);
 app.use("/api/user",NguoiDung);
+app.use('/api/cart', gioHangRouter);
 app.listen(5001,() => {
     console.log("Server dang bat dau tren cong 5001");    
 });

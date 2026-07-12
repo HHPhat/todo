@@ -45,6 +45,7 @@ export const register = async (req, res) => {
             message: "Đăng ký thành công!",
             token: token,
             user: {
+                id: user.id,
                 email: createdUser.email,
                 ho_va_ten: createdUser.ho_va_ten
             }
@@ -85,6 +86,7 @@ export const login = async (req, res) => {
             message: "Đăng nhập thành công!",
             token: token,
             user: {
+                id: user.id,
                 email: user.email,
                 ho_va_ten: user.ho_ten
             }

@@ -31,7 +31,7 @@ export const Header = () => {
   // Gọi API lấy danh sách sách yêu thích khi mở Box
   const fetchFavorites = async (userId) => {
     try {
-      const res = await axios.get(`http://localhost:5173/api/favorites/user/${userId}`);
+      const res = await axios.get(`http://localhost:5001/api/favorites/user/${userId}`);
       
       // Kiểm tra nghiêm ngặt: Nếu dữ liệu trả về đúng cấu trúc { success: true, data: [...] }
       if (res.data && res.data.success && Array.isArray(res.data.data)) {
@@ -68,7 +68,7 @@ export const Header = () => {
   const handleRemoveFavorite = async (sachId) => {
     const userId = currentUser.id || currentUser._id;
     try {
-      const res = await axios.delete(`http://localhost:5173/api/favorites/${userId}/${sachId}`);
+      const res = await axios.delete(`http://localhost:5001/api/favorites/${userId}/${sachId}`);
       if (res.data.success) {
         // Cập nhật lại state trực tiếp tại Frontend để giao diện thay đổi ngay lập tức
         setFavoritesList(prev => prev.filter(book => book.id !== sachId));
@@ -169,7 +169,7 @@ export const Header = () => {
                 <button className="flex flex-col items-center text-primary-container transition-colors gap-1">
                   <User size={24} className="scale-110" />
                   <span className="text-[10px] font-bold truncate max-w-[80px]">
-                    {currentUser.ho_ten}
+                    {currentUser.ho_va_ten}
                   </span>
                 </button>
 
@@ -222,28 +222,38 @@ export const Header = () => {
                   key={item.id} 
                   className="bg-[#D9D9D9] rounded-[1.5rem] p-4 flex items-center gap-4 relative shadow-sm hover:shadow transition-shadow"
                 >
-                    {/* Hình ảnh minh họa sách */}
-                    <div className="w-16 h-24 flex-shrink-0 bg-white rounded overflow-hidden shadow-sm">
-                      <img 
-                        src={`/src/img/${item.danh_muc_id}/${item.id}.png`} 
-                        alt={item.ten_sach} 
-                        className="w-full h-full object-cover"
-                        onError={(e) => { e.target.src = 'https://via.placeholder.com/150x225?text=No+Image'; }}
-                      />
-                    </div>
+                                        {/* 1. Hình ảnh minh họa sách */}
+                  <div className="w-16 h-24 flex-shrink-0 bg-white rounded overflow-hidden shadow-sm">
+                    <img 
+                      src={`/src/img/${item.danh_muc_id}/${item.id}.png`} 
+                      alt={item.tieu_de} 
+                      className="w-full h-full object-cover"
+                      onError={(e) => { e.target.src = 'https://via.placeholder.com/150x225?text=No+Image'; }}
+                    />
+                  </div>
 
-                    {/* Thông tin chi tiết */}
-                    <div className="flex-1 min-w-0 flex flex-col justify-between h-full py-1">
-                      <div>
-                        <h3 className="font-bold text-base text-gray-900 truncate">{item.ten_sach}</h3>
-                        <p className="text-xs text-gray-600 mt-0.5">Đã bán: {item.da_ban || 0}</p>
-                      </div>
-                      
-                      {/* 5 Ngôi sao rỗng theo UI mẫu */}
-                      <div className="flex text-gray-800 mt-2">
-                        {[...Array(5)].map((_, i) => <Star key={i} size={16} className="stroke-[1.5]" />)}
-                      </div>
+                  {/* 2. Phần thông tin chi tiết (Đã sửa lại để đẩy text lên cao và căn lề trái sát ảnh) */}
+                  <div className="flex-1 min-w-0 flex flex-col justify-start items-start text-left h-24 py-0.5 pl-1">
+                    {/* Tên sách đưa lên cao nhất, sát ảnh */}
+                    <h3 className="font-bold text-base text-gray-900 truncate w-full leading-tight">
+                      {item.tieu_de}
+                    </h3>
+                    
+                    {/* YÊU CẦU: Thêm dòng hiển thị giá tiền (được định dạng VND gọn gàng) */}
+                    <p className="text-sm font-bold text-red-600 mt-1">
+                      {item.gia ? new Intl.NumberFormat('vi-VN').format(item.gia) + ' đ' : 'Chưa có giá'}
+                    </p>
+
+                    {/* YÊU CẦU: Dòng chữ "Đã bán" đã được căn lề trái hoàn toàn */}
+                    <p className="text-xs text-gray-600 mt-0.5 w-full">
+                      Đã bán: {item.da_ban || 0}
+                    </p>
+                    
+                    {/* 5 Ngôi sao rỗng nằm ở dưới cùng của khung thông tin */}
+                    <div className="flex text-gray-800 mt-auto">
+                      {[...Array(5)].map((_, i) => <Star key={i} size={14} className="stroke-[1.5]" />)}
                     </div>
+                  </div>
 
                     {/* Cụm Action: Giỏ hàng & Nút X xóa bỏ */}
                     <div className="flex items-center gap-3 pr-1">
