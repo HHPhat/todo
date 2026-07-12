@@ -7,7 +7,7 @@ class SachTrongGioHangModel {
     // Lấy toàn bộ giỏ hàng của 1 người dùng (kèm thông tin sách)
     async getGioHang(nguoiDungId) {
         const [rows] = await pool.query(
-            `SELECT g.sach_id, g.so_luong, s.tieu_de, s.gia, s.tac_gia, k.so_luong as con_lai
+            `SELECT g.sach_id, g.so_luong,s.danh_muc_id, s.tieu_de, s.gia, s.tac_gia, k.so_luong as con_lai
              FROM SACH_TRONG_GIO_HANG g
              JOIN SACH s ON g.sach_id = s.id
              JOIN KHO_SACH k ON g.sach_id = k.sach_id
